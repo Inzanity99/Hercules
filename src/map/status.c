@@ -2721,13 +2721,19 @@ static int status_calc_pc_(struct map_session_data *sd, enum e_status_calc_opt o
 	if ((skill_lv=pc->checkskill(sd,CR_TRUST)) > 0)
 		bstatus->max_hp += skill_lv*200;
 
-	if ((pc->checkskill(sd,SU_SPRITEMABLE)) > 0)
+	if ((pc->checkskill(sd, SU_SPRITEMABLE)) > 0)
 		bstatus->max_hp += 1000;
+
+	if ((pc->checkskill(sd, SU_POWEROFSEA)) > 0)
+		bstatus->max_hp += (int64)bstatus->max_hp * 3 / 100;
+
+	if ((pc->checkskill(sd, SU_SPIRITOFSEA)) > 0)
+		bstatus->max_hp += (int64)bstatus->max_hp * 5 / 100;
 
 	// Apply relative modifiers from equipment
 	if(sd->hprate < 0)
 		sd->hprate = 0;
-	if(sd->hprate!=100)
+	if(sd->hprate != 100)
 		bstatus->max_hp = APPLY_RATE(bstatus->max_hp, sd->hprate);
 	if(battle_config.hp_rate != 100)
 		bstatus->max_hp = APPLY_RATE(bstatus->max_hp, battle_config.hp_rate);
@@ -2762,7 +2768,7 @@ static int status_calc_pc_(struct map_session_data *sd, enum e_status_calc_opt o
 	// Apply relative modifiers from equipment
 	if(sd->sprate < 0)
 		sd->sprate = 0;
-	if(sd->sprate!=100)
+	if(sd->sprate != 100)
 		bstatus->max_sp = APPLY_RATE(bstatus->max_sp, sd->sprate);
 	if(battle_config.sp_rate != 100)
 		bstatus->max_sp = APPLY_RATE(bstatus->max_sp, battle_config.sp_rate);
@@ -2816,6 +2822,10 @@ static int status_calc_pc_(struct map_session_data *sd, enum e_status_calc_opt o
 		bstatus->cri = bstatus->cri * sd->critical_rate/100;
 	if (pc->checkskill(sd, SU_POWEROFLIFE) > 0)
 		bstatus->cri += 20;
+	if (pc->checkskill(sd, SU_POWEROFLAND) > 0)
+		bstatus->cri += 3;
+	if (pc->checkskill(sd, SU_SPIRITOFLAND) > 0)
+		bstatus->cri += 5;
 
 	if(sd->flee2_rate < 0)
 		sd->flee2_rate = 0;
@@ -2977,6 +2987,8 @@ static int status_calc_pc_(struct map_session_data *sd, enum e_status_calc_opt o
 		sd->sprecov_rate = 0;
 
 	// Anti-element and anti-race
+	if ((skill_lv = pc->checkskill(sd, SU_BASIC_SKILL)) > 0)
+		sd->subele[ELE_FIRE] -= 10;
 	if ((skill_lv = pc->checkskill(sd, CR_TRUST)) > 0)
 		sd->subele[ELE_HOLY] += skill_lv * 5;
 	if ((skill_lv = pc->checkskill(sd, BS_SKINTEMPER)) > 0) {
