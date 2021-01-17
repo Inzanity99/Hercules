@@ -481,10 +481,10 @@ static int64 battle_calc_weapon_damage(struct block_list *src, struct block_list
 		if ( sd->bonus.atk_rate )
 			damage += damage * sd->bonus.atk_rate / 100;
 
-		if (sd && pc->checkskill(sd, SU_POWEROFLIFE) > 0)
+		if (pc->checkskill(sd, SU_POWEROFLIFE) > 0)
 			damage += damage * 3 / 100;
 
-		if (sd && pc->checkskill(sd, SU_SPIRITOFLAND) > 0)
+		if (pc->checkskill(sd, SU_SPIRITOFLAND) > 0)
 			damage += damage * 5 / 100;
 	}
 
