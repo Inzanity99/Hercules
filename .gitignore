@@ -119,3 +119,5 @@ Thumbs.db
 /vcproj-*/map-server
 /vcproj-*/mapcache
 /vcproj-*/plugin-*/
+src/common/mmo.h
+conf/global/sql_connection.conf
